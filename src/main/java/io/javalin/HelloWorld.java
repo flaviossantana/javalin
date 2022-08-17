@@ -1,5 +1,7 @@
 package io.javalin;
 
+import org.eclipse.jetty.websocket.api.StatusCode;
+
 public class HelloWorld {
     public static void main(String[] args) {
         Javalin app = Javalin.create().start(7080);
@@ -7,6 +9,7 @@ public class HelloWorld {
 
         beforeHandlers(app);
         endpointHandlers(app);
+        afterHandlers(app);
     }
 
     private static void beforeHandlers(Javalin app) {
@@ -14,9 +17,23 @@ public class HelloWorld {
         app.before("/path/*", ctx -> System.out.println("runs before all requests in /path"));
     }
 
-    private static void endpointHandlers
-        (Javalin app) {
+    private static void endpointHandlers(Javalin app) {
         app.get("/path/output", ctx -> ctx.json("{\"message\":\"Hello World\"}"));
         app.post("/input", ctx -> ctx.status(201));
+
+        // the {} syntax does not allow slashes ('/') as part of the parameter
+        app.get("/hello/{name}", ctx -> ctx.result("Hello: " + ctx.pathParam("name")));
+
+        // the <> syntax allows slashes ('/') as part of the parameter
+        app.get("/hello/<name>", ctx -> ctx.result("Hello: " + ctx.pathParam("name")));
+
+        // will match anything starting with /path/
+        app.get("/path/*", ctx -> ctx.result("You are here because " + ctx.path() + " matches " + ctx.matchedPath()));
     }
+
+    private static void afterHandlers(Javalin app) {
+        app.after((ctx) -> System.out.println("runs after all requests"));
+        app.after("/path/*", ctx -> System.out.println("runs after all requests in /path"));
+    }
+
 }
