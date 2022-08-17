@@ -10,6 +10,7 @@ public class HelloWorld {
         beforeHandlers(app);
         endpointHandlers(app);
         afterHandlers(app);
+        context(app);
     }
 
     private static void beforeHandlers(Javalin app) {
@@ -31,12 +32,12 @@ public class HelloWorld {
         app.get("/path/*", ctx -> ctx.result("You are here because " + ctx.path() + " matches " + ctx.matchedPath()));
     }
 
-    private void context(Javalin app){
+    private static void context(Javalin app){
         app.post("/context", (ctx) -> {
-            ctx.body();
-            ctx.ip();
-            ctx.port();
-            ctx.fullUrl();
+            System.out.println(ctx.body());
+            System.out.println(ctx.ip());
+            System.out.println(ctx.port());
+            System.out.println(ctx.fullUrl());
         });
     }
 
