@@ -1,6 +1,7 @@
 package io.javalin;
 
-import org.eclipse.jetty.websocket.api.StatusCode;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class HelloWorld {
     public static void main(String[] args) {
@@ -11,11 +12,13 @@ public class HelloWorld {
         endpointHandlers(app);
         afterHandlers(app);
         context(app);
+        appAttributes(app);
     }
 
     private static void beforeHandlers(Javalin app) {
         app.before((ctx) -> System.out.println("runs before all requests"));
         app.before("/path/*", ctx -> System.out.println("runs before all requests in /path"));
+        app.before("/attribute/*", ctx -> app.attribute("myValue", "foo"));
     }
 
     private static void endpointHandlers(Javalin app) {
@@ -44,6 +47,17 @@ public class HelloWorld {
     private static void afterHandlers(Javalin app) {
         app.after((ctx) -> System.out.println("runs after all requests"));
         app.after("/path/*", ctx -> System.out.println("runs after all requests in /path"));
+    }
+
+    private static void appAttributes(Javalin app) {
+        app.attribute("name", "Javalin");
+        app.attribute("version", "1.0.0");
+        app.attribute("description", "A lightweight web framework for Java");
+
+        app.get("/attribute/ctx", ctx -> {
+            String myValue = ctx.appAttribute("myValue");
+            ctx.result(myValue);
+        });
     }
 
 }
