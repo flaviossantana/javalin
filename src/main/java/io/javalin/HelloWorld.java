@@ -31,6 +31,15 @@ public class HelloWorld {
         app.get("/path/*", ctx -> ctx.result("You are here because " + ctx.path() + " matches " + ctx.matchedPath()));
     }
 
+    private void context(Javalin app){
+        app.post("/context", (ctx) -> {
+            ctx.body();
+            ctx.ip();
+            ctx.port();
+            ctx.fullUrl();
+        });
+    }
+
     private static void afterHandlers(Javalin app) {
         app.after((ctx) -> System.out.println("runs after all requests"));
         app.after("/path/*", ctx -> System.out.println("runs after all requests in /path"));
