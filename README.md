@@ -1,5 +1,5 @@
 # Javalin
-A simple web framework for Java and Kotlin
+Um framework web simples para Java e Kotlin
 
 ```java
 import io.javalin.Javalin;

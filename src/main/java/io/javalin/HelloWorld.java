@@ -35,7 +35,7 @@ public class HelloWorld {
         app.get("/path/*", ctx -> ctx.result("You are here because " + ctx.path() + " matches " + ctx.matchedPath()));
     }
 
-    private static void context(Javalin app){
+    private static void context(Javalin app) {
         app.post("/context", (ctx) -> {
             System.out.println(ctx.body());
             System.out.println(ctx.ip());
